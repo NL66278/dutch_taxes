@@ -6,12 +6,25 @@
 class VpbDeclaration(object):
     """Load data for Vpb declaration, do cumputations, print report."""
 
-    def do_main(self, args):
+    def do_main(self):
         """Drive the Vpb declaration report."""
-        self.load_data()
-        self.do_computations()
+        self.load()
+        self.compute()
         self.report()
+
+    def load(self):
+        """Load data for a particular Vpb declaration."""
+        raise NotImplementedError()
+
+    def compute(self):
+        """Do computations for a particular Vpb declaration."""
+        raise NotImplementedError()
 
     def report(self):
         """Print report with all the lines to enter on the Vpb Declaration."""
         raise NotImplementedError()
+
+
+if __name__ == '__main__':
+    DECLARATION = VpbDeclaration()
+    DECLARATION.do_main()

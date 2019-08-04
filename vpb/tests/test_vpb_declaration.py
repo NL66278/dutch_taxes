@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import unittest
 
-from ..vpb_declaration import VpbDeclaration
+from vpb.vpb_declaration import VpbDeclaration
 
 
 class TestVpbDeclaration(unittest.TestCase):
