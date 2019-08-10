@@ -1,6 +1,7 @@
 # Copyright 2019 - Ronald Portier - <ronald@portier.eu>.
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 # pylint: disable=too-few-public-methods,no-self-use
+from .library.finance_fact import FinanceFact, BranchFinanceFact, FinanceTree
 
 
 class Declaration():
@@ -52,6 +53,7 @@ class Declaration():
         self.print_start_lines()
         self.print_intangible_assets()
         self.print_financial_assets()
+        self.print_debit_claims()
         self._print_data_line(
             "Resultaat gewone bedrijfsuitoefening", data.profit_or_loss)
 
@@ -80,8 +82,39 @@ class Declaration():
             "Totaal financiële vaste activa",
             data.total_financial_assets)
 
+    def print_debit_claims(self):
+        data = self.vpb_data
+        section_data = DotMap()
+        section_data.section_header = "Vorderingen"
+        section_data.subsections = []
+        subsection = DotMap()
+        subsection.detail_lines = []
+        claim0 = DotMap()
+        claim0.text = data.bank_accounts[0][0]
+        claim0.amount = data.bank_accounts[0][1]
+        subsection.detail_lines.append(claim0)
+        subsection.total = DotMap()
+        subsection.total.text = "Totaal vorderingen"
+        subsection.total.amount = claim0.amount
+        section_data.subsections.append(subsection)
+        self._print_section(section_data)
+
+    def _print_section(self, section_data):
+        self._print_sub_header(section_data.section_header)
+        for subsection in section_data.subsections:
+            self._print_subsection(subsection)
+
+    def _print_subsection(self, subsection):
+        for detail_line in subsection.detail_lines:
+            self._print_data_line(detail_line.text, detail_line.amount)
+        self._print_plus_line()
+        self._print_data_line(subsection.total.text, subsection.total.amount)
+
     def _print_data_line(self, text, amount):
         print("{0:<70}{1:>10}".format(text, amount))
+
+    def _print_plus_line(self):
+        print("{0:>80}".format('-------- +'))
 
     def _print_sub_header(self, text):
         print("{0:-<80}".format('-'))
